@@ -1,0 +1,28 @@
+[app/ui]
+version = 6.6.1
+modtime = 1496437842.803262000
+
+[app/launcher]
+version = 6.6.1
+modtime = 1496437842.805410000
+
+[html/custom_table_cell_and_row_rendering_html]
+access = read : [ * ], write : [ * ]
+export = system
+owner = admin
+version = 6.6.1
+modtime = 1496438299.443207000
+
+[html/customtables]
+access = read : [ * ], write : [ * ]
+export = none
+owner = admin
+version = 6.6.1
+modtime = 1496691388.171863000
+
+[html/yaaaas_html]
+access = read : [ * ], write : [ * ]
+export = none
+owner = admin
+version = 6.6.1
+modtime = 1496706891.548496000

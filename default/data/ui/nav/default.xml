@@ -1,0 +1,4 @@
+<nav search_view="login_html" color="#65A637">
+  <view name="login_html" default="true" />
+  <view name="main" default='false' />
+</nav>

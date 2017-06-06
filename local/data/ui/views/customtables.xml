@@ -1,0 +1,18 @@
+<dashboard stylesheet="custom.css">
+  <label>Custom table cell and row rendering</label>
+  <row>
+    <panel>
+      <table>
+        <title>Clusters</title>
+        <search>
+          <query>index=_audit | stats count by sourcetype, source, host</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="wrap">undefined</option>
+        <option name="rowNumbers">undefined</option>
+        <option name="drilldown">row</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Avanti Status</title>
+    <link rel="shortcut icon" href="{{SPLUNKWEB_URL_PREFIX}}/static/img/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="/en-US/static/@f4c1eb50e0f3/css/build/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="/en-US/static/@f4c1eb50e0f3/css/build/pages/dashboard-simple-bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{{SPLUNKWEB_URL_PREFIX}}/static/app/trial/dashboard.css" />
+    <!-- Contains custom icons: -->
+    <link rel="stylesheet" type="text/css" media="all" href="{{SPLUNKWEB_URL_PREFIX}}/static/app/trial/custom.css" />
+</head>
+<script>
+function retrieve(region,name="",provider="aws",item="") {
+  $.get( "https://jsonplaceholder.typicode.com/users", function( data ) {
+    $.each(data,function(i,item) {
+      console.log(data[i]);
+    });
+  });
+}
+</script>
+<body onload = "retrieve('us-west-1')"class="simplexml preload locale-en">
+
+<!--
+BEGIN LAYOUT
+This section contains the layout for the dashboard. Splunk uses proprietary
+styles in <div> tags, similar to Bootstrap's grid system.
+-->
+<header>
+<a class="navSkip" href="#navSkip" tabindex="1">Screen reader users, click here to skip the navigation bar</a>
+<div class="header splunk-header">
+        <div id="placeholder-splunk-bar">
+            <a href="{{SPLUNKWEB_URL_PREFIX}}/app/launcher/home" class="brand" title="splunk > listen to your data">splunk<strong>></strong></a>
+        </div>
+            <div id="placeholder-app-bar"></div>
+</div>
+<a id="navSkip"></a>
+</header>
+<div class="dashboard-body container-fluid main-section-body" data-role="main">
+    <div class="dashboard-header clearfix">
+        <h2>Clusters</h2>
+    </div>
+
+    <div id="row3" class="dashboard-row dashboard-row3">
+        <div id="panel3" class="dashboard-cell" style="width: 100%;">
+            <div class="dashboard-panel clearfix">
+
+                <div class="panel-element-row">
+                    <div id="element3" class="dashboard-element table" style="width: 100%">
+                        <div class="panel-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div>
+</div>
+
+<!--
+END LAYOUT
+-->
+<script src="{{SPLUNKWEB_URL_PREFIX}}/config?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/i18n.js"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/i18ncatalog?autoload=1"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/build/simplexml/index.js"></script>
+<script src="{{SPLUNKWEB_URL_PREFIX}}/static/app/trial/logic.js"></script>
+<script type="text/javascript">
+
+
+// <![CDATA[
+// <![CDATA[
+
+//
+// LIBRARY REQUIREMENTS
+//
+// In the require function, we include the necessary libraries and modules for
+// the HTML dashboard. Then, we pass variable names for these libraries and
+// modules as function parameters, in order.
+//
+// When you add libraries or modules, remember to retain this mapping order
+// between the library or module and its function parameter. You can do this by
+// adding to the end of these lists, as shown in the commented examples below.
+
+require([
+    "splunkjs/mvc",
+    "splunkjs/mvc/utils",
+    "splunkjs/mvc/tokenutils",
+    "underscore",
+    "jquery",
+    "splunkjs/mvc/simplexml",
+    "splunkjs/mvc/layoutview",
+    "splunkjs/mvc/simplexml/dashboardview",
+    "splunkjs/mvc/simplexml/dashboard/panelref",
+    "splunkjs/mvc/simplexml/element/chart",
+    "splunkjs/mvc/simplexml/element/event",
+    "splunkjs/mvc/simplexml/element/html",
+    "splunkjs/mvc/simplexml/element/list",
+    "splunkjs/mvc/simplexml/element/map",
+    "splunkjs/mvc/simplexml/element/single",
+    "splunkjs/mvc/simplexml/element/table",
+    "splunkjs/mvc/simpleform/formutils",
+    "splunkjs/mvc/simplexml/eventhandler",
+    "splunkjs/mvc/simplexml/searcheventhandler",
+    "splunkjs/mvc/simpleform/input/dropdown",
+    "splunkjs/mvc/simpleform/input/radiogroup",
+    "splunkjs/mvc/simpleform/input/linklist",
+    "splunkjs/mvc/simpleform/input/multiselect",
+    "splunkjs/mvc/simpleform/input/checkboxgroup",
+    "splunkjs/mvc/simpleform/input/text",
+    "splunkjs/mvc/simpleform/input/timerange",
+    "splunkjs/mvc/simpleform/input/submit",
+    "splunkjs/mvc/searchmanager",
+    "splunkjs/mvc/savedsearchmanager",
+    "splunkjs/mvc/postprocessmanager",
+    "splunkjs/mvc/simplexml/urltokenmodel",
+    "splunkjs/mvc/tableview" // added this for the table renderers
+    ],
+    function(
+        mvc,
+        utils,
+        TokenUtils,
+        _,
+        $,
+        DashboardController,
+        LayoutView,
+        Dashboard,
+        PanelRef,
+        ChartElement,
+        EventElement,
+        HtmlElement,
+        ListElement,
+        MapElement,
+        SingleElement,
+        TableElement,
+        FormUtils,
+        EventHandler,
+        SearchEventHandler,
+        DropdownInput,
+        RadioGroupInput,
+        LinkListInput,
+        MultiSelectInput,
+        CheckboxGroupInput,
+        TextInput,
+        TimeRangeInput,
+        SubmitButton,
+        SearchManager,
+        SavedSearchManager,
+        PostProcessManager,
+        UrlTokenModel,
+        TableView // added this for the table renderers
+        ) {
+          console.log(sessionStorage.ad_user);
+          if (sessionStorage.ad_user === undefined) {
+            window.location.href = 'login_html';
+          }
+
+        var pageLoading = true;
+
+
+        //
+        // TOKENS
+        //
+
+        // Create token namespaces
+        var urlTokenModel = new UrlTokenModel();
+        mvc.Components.registerInstance('url', urlTokenModel);
+        var defaultTokenModel = mvc.Components.getInstance('default', {create: true});
+        var submittedTokenModel = mvc.Components.getInstance('submitted', {create: true});
+
+        urlTokenModel.on('url:navigate', function() {
+            defaultTokenModel.set(urlTokenModel.toJSON());
+            if (!_.isEmpty(urlTokenModel.toJSON()) && !_.all(urlTokenModel.toJSON(), _.isUndefined)) {
+                submitTokens();
+            } else {
+                submittedTokenModel.clear();
+            }
+        });
+
+        // Initialize tokens
+        defaultTokenModel.set(urlTokenModel.toJSON());
+
+        function submitTokens() {
+            // Copy the contents of the defaultTokenModel to the submittedTokenModel and urlTokenModel
+            FormUtils.submitForm({ replaceState: pageLoading });
+        }
+
+        function setToken(name, value) {
+            defaultTokenModel.set(name, value);
+            submittedTokenModel.set(name, value);
+        }
+
+        function unsetToken(name) {
+            defaultTokenModel.unset(name);
+            submittedTokenModel.unset(name);
+        }
+
+        //
+        // SEARCH MANAGERS
+        //
+        var search3 = new SearchManager({
+            "id": "search3",
+            "status_buckets": 0,
+            "cancelOnUnload": true,
+            "latest_time": "now",
+            "search": "index=_audit | stats count by sourcetype, source, host",
+            "earliest_time": "0",
+            "app": utils.getCurrentApp(),
+            "auto_cancel": 90,
+            "preview": true,
+            "runWhenTimeIsUndefined": false
+        }, {tokens: true, tokenNamespace: "submitted"});
+
+
+
+        //
+        // SPLUNK LAYOUT
+        //
+
+        $('header').remove();
+        new LayoutView({"hideFooter": false, "hideSplunkBar": false, "hideAppBar": false, "hideChrome": false})
+            .render()
+            .getContainerElement()
+            .appendChild($('.dashboard-body')[0]);
+
+
+        //
+        // DASHBOARD EDITOR
+        //
+
+        new Dashboard({
+            id: 'dashboard',
+            el: $('.dashboard-body'),
+            showTitle: true,
+            editable: true
+        }, {tokens: true}).render();
+
+
+        //
+        // VIEWS: VISUALIZATION ELEMENTS
+        //
+
+        var element1 = new TableElement({
+            "id": "element1",
+            "drilldown": "row",
+            "rowNumbers": "undefined",
+            "wrap": "undefined",
+            "managerid": "search1",
+            "el": $('#element1')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+        var element2 = new TableView({ // Changed TableElement to TableView
+            "id": "element2",
+            "drilldown": "row",
+            "rowNumbers": "undefined",
+            "wrap": "undefined",
+            "managerid": "search1", // Updated the search ID to point to this search
+            "el": $('#element2'),
+            // Add this code to format the sparkline cell
+            format: {
+                "sparkline": [ // This field name is required
+                    {
+                        "type": "sparkline", // This property must be "sparkline"
+
+                        // Sparkline options
+                        "options":
+                        {
+                            "type": "bar",
+                            "height": "40px",
+                            "barWidth": "5px",
+                            "colorMap":
+                            {
+                                "100:": "#0033CC",
+                                ":99": "#00FF00"
+                            }
+                        }
+                    }
+                ]
+            }
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+
+        var element3 = new TableView({ // Changed TableElement to TableView
+            "id": "element3",
+            "drilldown": "row",
+            "rowNumbers": "undefined",
+            "wrap": "undefined",
+            "managerid": "search3",
+            "el": $('#element3')
+        }, {tokens: true, tokenNamespace: "submitted"}).render();
+
+
+
+        /*
+
+                Define the customization for table cells
+
+        */
+
+        // Define icons for the custom table cell
+        var ICONS = {
+            severe: "alert-circle",
+            elevated: "alert",
+            low: "check-circle"
+        };
+
+        // Use the BaseCellRenderer class in TableView to create a custom table cell renderer
+            var CustomCellRenderer = TableView.BaseCellRenderer.extend({
+            canRender: function(cellData) {
+                // This method returns "true" for the "range" field
+                return cellData.field === "range";
+            },
+
+            // This render function only works when canRender returns "true"
+            render: function($td, cellData) {
+                console.log("cellData: ", cellData);
+
+                var icon = "question";
+                if(ICONS.hasOwnProperty(cellData.value)) {
+                    icon = ICONS[cellData.value];
+                }
+                $td.addClass("icon").html(_.template('<i class="icon-<%-icon%> <%- range %>" title="<%- range %>"></i>', {
+                    icon: icon,
+                    range: cellData.value
+                }));
+            }
+        });
+
+        // Use the BasicRowRenderer class to create a custom table row renderer
+        var CustomRowRenderer = TableView.BaseRowExpansionRenderer.extend({
+            canRender: function(rowData) {
+                console.log("RowData: ", rowData);
+                return true;
+            },
+
+            render: function($container, rowData) {
+            // Print the rowData object to the console
+            console.log("RowData: ", rowData);
+
+            // Display some of the rowData in the expanded row
+            $container.append("<div>"
+                + "<b>rowIndex</b>: " + rowData.rowIndex + "<br>"
+                + "<b>colspan</b>: " + rowData.colspan + "<br>"
+                + "<b>fields</b>: " + rowData.fields + "<br>"
+                + "<b>values</b>: " + rowData.values
+                + "</div>");
+            }
+        });
+
+        // Create an instance of the custom cell renderer,
+        // add it to the second table, and render the table
+        var myCellRenderer = new CustomCellRenderer();
+        element2.addCellRenderer(myCellRenderer);
+        element2.render();
+
+        // Create an instance of the custom row renderer,
+        // add it to the third table, and render the table
+        var myRowRenderer = new CustomRowRenderer();
+        element3.addRowExpansionRenderer(myRowRenderer);
+        element3.render();
+
+        /*
+
+                End customization
+
+        */
+
+
+        // Initialize time tokens to default
+        if (!defaultTokenModel.has('earliest') && !defaultTokenModel.has('latest')) {
+            defaultTokenModel.set({ earliest: '0', latest: '' });
+        }
+
+        submitTokens();
+
+
+        //
+        // DASHBOARD READY
+        //
+
+        DashboardController.ready();
+        pageLoading = false;
+
+    }
+);
+// ]]>
+</script>
+</body>
+</html>
